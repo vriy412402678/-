@@ -1,0 +1,206 @@
+<footer class="footer" id="footer">
+    <div class="pt-5" >
+        <div class="footer-left"></div>
+        <div class="footer-right mt-5"></div>
+        <hr class="clearfix hr-line" />
+    </div>
+
+</footer>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--<script src="<{$fstatic_dir}>js/jquery.slim.min.js" ></script>-->
+<script src="<{$fstatic_dir}>js/jquery.min.js"></script>
+<script src="<{$fstatic_dir}>js/popper.min.js"></script>
+<script src="<{$fstatic_dir}>js/bootstrap.min.js"></script>
+<script src="<{$fstatic_dir}>js/topage.js"></script>
+<script src="<{$fstatic_dir}>js/layer/layer.js"></script>
+<!--<script src="<{$fstatic_dir}>js/stickUp.min.js"></script>-->
+<script src="<{$fstatic_dir}>js/layui/layui.js"></script>
+<script>
+
+   if($(window).width() < 500){
+       console.log($(window).width());
+      $(".follow-btn").css('width','30%');
+      $(".note-right-pin").css('width','100%');
+      $(".note-left-pin").css('width','100%');
+      $("#search").css('width','70%');
+      $("#you").css('width','50%');
+      $("#followed").css('width','50%');
+      $(".followed-page li > img").css({'width':'50','height':'50'});
+      $(".you-page li > img").css({'width':'50','height':'50'});
+      $(".you-page li > span").css({'width':'50%'});
+      $(".message-input").css('width','80%');
+      $("#headimg").css({'width':'118','height':'118'});
+      $("#myzuopin").attr('style','100%');
+      $(".zuopin-header").attr('style','margin-left:20px;margin-top:20px;');
+   }else{
+      $(".follow-btn").css('width','150px');
+   }
+
+
+    $(".login-about").on('click',function(){
+
+        if($(window).width() < 1200){
+            $(".rightMenu").toggleClass("min-swiper");
+            $(".fixed-top").toggleClass("min-swiper-top");
+
+        }else{
+            $(".rightMenu").toggleClass("swiper");
+            $(".fixed-top").toggleClass("swiper-top");
+        }
+
+        if($(".leftMenu").is(":hidden")){
+            $(".leftMenu").show();
+        }else{
+            $(".leftMenu").hide();
+        }
+    });
+
+    $(".login-logo").on('click',function(){
+        $(".login-reg").hide();
+        $(".forgetpwd").hide();
+        if($('.login-alert').is(":hidden")){
+            $('.login-alert').show();
+        }else{
+            $('.login-alert').hide();
+        }
+    });
+   $("#login").on("click",function(){
+       $.ajax({
+           type:"post",
+           url:"<{htmlUrl(['index/login'])}>",
+           data:$("#loginForm").serialize(),
+           dataType:"json",
+           success:function(e){
+               if(e.error_code == 1){
+                   layer.msg(e.msg,{time: 2000,icon:5});
+               }else{
+                   $("#login").text('登录 . . .');
+                   location.href = e.data;
+               }
+           },
+           error:function(){
+               layer.msg('网络异常',{time: 2000,icon: 5});
+           }
+       })
+   });
+   $("#reg").on("click",function(){
+       $('.login-reg').show();
+       $('.login-alert').hide();
+       $(".forgetpwd").hide();
+   });
+
+   $("#forget-pwd").on("click",function(){
+        $(".forgetpwd").show();
+        $('.login-reg').hide();
+        $('.login-alert').hide();
+   });
+
+   $("#register").on("click",function(){
+       $.ajax({
+           type:"post",
+           url:"<{htmlUrl(['index/register'])}>",
+           data:$("#regForm").serialize(),
+           dataType:"json",
+           success:function(e){
+               if(e.error_code == 1){
+                   layer.msg(e.msg,{time: 2000,icon:5});
+               }else{
+                   layer.msg(e.msg,{time: 2000, icon:6},function(){
+                       location.href = e.data;
+                   });
+               }
+           },
+           error:function(){
+               layer.msg('网络异常',{time: 2000,icon: 5});
+           }
+       })
+   });
+
+    $("#forgetpwd").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/forget-pwd'])}>",
+            data:$("#pwdForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    layer.msg(e.msg,{time: 2000, icon:6},function(){
+                        location.href = e.data;
+                    });
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+
+
+   <!--发送验证码-->
+   function getcode(){
+       var obj = $("#btn");
+
+       $.ajax({
+           type:"post",
+           url:"<{htmlUrl(['index/sms-send'])}>",
+           data:{phone:$("#phone").val()},
+           dataType:"json",
+           success:function(e){
+               if(e.error_code == 1){
+                   layer.msg(e.msg,{time: 2000,icon:5});
+               }else{
+                   settime(obj);
+                   layer.msg(e.msg,{time: 2000, icon:6});
+               }
+           },
+           error:function(){
+               layer.msg('网络异常',{time: 2000,icon: 5});
+           }
+       });
+   };
+
+    <!--发送验证码-->
+    function getcode2(){
+        var obj = $("#btn2");
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/sms-send'])}>",
+            data:{phone:$("#phone2").val(),type:2},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    settime(obj);
+                    layer.msg(e.msg,{time: 2000, icon:6});
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        });
+    };
+
+   <!--发送验证码倒计时-->
+   var countdown = 60;
+   function settime(obj) {
+       if (countdown == 0) {
+           obj.attr('disabled',false);
+           //obj.removeattr("disabled");
+           obj.val("获取验证码");
+           countdown = 60;
+           return;
+       } else {
+           obj.attr('disabled',true);
+           obj.val("重新发送(" + countdown + ")");
+           countdown--;
+       }
+       setTimeout(function() {
+               settime(obj) }
+           ,1000)
+   };
+</script>

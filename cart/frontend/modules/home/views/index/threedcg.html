@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<{$fstatic_dir}>js/layui/css/layui.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/diy.css">
+    <title>首页</title>
+    <style type="text/css">
+        .article {
+            display: block;
+            overflow: hidden;
+        }
+        .article img{
+            cursor: pointer;
+            transition: all 0.6s;
+        }
+        .article img:hover {
+            transform: scale(1.2);
+        }
+        .article > img {
+            display: block;
+            width: 100%;
+
+        }
+        .article h2 {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 0 0 12px 0;
+        }
+
+        .wall {
+            display: block;
+            position: relative;
+        }
+        .wall-column {
+            display: block;
+            position: relative;
+            width: 25%;
+            float: left;
+            /*padding: 0 12px;*/
+            box-sizing: border-box;
+        }
+        @media (max-width: 640px) {
+            .wall-column {
+                width: 50%;
+            }
+        }
+        @media (max-width: 480px) {
+            .wall-column {
+                width: auto;
+                float: none;
+            }
+        }
+        .header-title{width:40%;margin-left:10%;}
+        .title{ display:block;letter-spacing:5px;line-height:50px;}
+    </style>
+</head>
+<body>
+
+<{include '@frontend/views/include/common_header.html'}>
+<div class="rightMenu" >
+<main class="mt-100">
+
+    <div class="mb-5 header-title clearfix">
+        <h5 class="e6ad91 title"><{$config.three_dcg}></h5>
+    </div>
+
+
+    <ul class="nav justify-content-center mt-5">
+        <li class="nav-item">
+            <a class="nav-link <{if !isset($cate_id) || !empty($cate_id)}>text-white<{else}>allcolor<{/if}>" href="<{htmlUrl(['/home/index/three-dcg'])}>">全部</a>
+        </li>
+        <{foreach from=$category item=vo}>
+        <li class="nav-item">
+            <a class="nav-link <{if $vo.id eq $cate_id}>allcolor<{else}>text-white<{/if}>" href="<{htmlUrl(['/home/index/three-dcg','cate_id'=>$vo.id])}>"><{$vo.name}></a>
+        </li>
+        <{/foreach}>
+    </ul>
+
+
+    <div class="wall mt-3 clearfix" id="flow">
+
+        <{if !empty($threeinfo)}>
+        <{foreach from=$threeinfo item=vo }>
+        <a class="article" href="<{htmlUrl(['/home/index/detail','id'=>$vo.id])}>">
+            <img src="<{getImgSrc($vo.img)}>">
+            <!--<h2 class="text-muted"><{$vo.title}></h2>-->
+        </a>
+        <{/foreach}>
+        <{/if}>
+
+    </div>
+
+
+</main>
+
+<{include '@frontend/views/include/common_footer.html'}>
+</div>
+<script src="<{$fstatic_dir}>js/jaliswall.js"></script>
+<script>
+    $(function(){
+        $('.wall').jaliswall({ item: '.article' });
+    });
+</script>
+</body>
+</html>

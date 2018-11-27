@@ -1,0 +1,109 @@
+<header class="fixed-top">
+	<!--navbar-expand-lg-->
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="<{if Yii::$app->request->hostinfo eq $current_url }>mt-3 mb-3<{/if}> login-about">About</span>
+        <a class="<{if Yii::$app->request->hostinfo eq $current_url }>mb-3<{/if}> navbar-brand" href="<{Yii::$app->request->hostinfo}>"><img src="<{$fstatic_dir}>images/logo.png"<{if Yii::$app->request->hostinfo eq $current_url }> width="60" height="60"<{else}> width="55" height="50"<{/if}>></a>
+        <{if !empty($username)}>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <{else}>
+        <span class="<{if Yii::$app->request->hostinfo eq $current_url }>mt-3 mb-3<{/if}> login-logo">Login</span>
+        <{/if}>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav">
+                <{if empty($member_id)}>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="<{htmlUrl(['/home/index/register'])}>">注册</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="<{htmlUrl(['/home/index/login'])}>">登录</a>
+                </li>
+                <{else}>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="<{htmlUrl(['/user/user/index'])}>"><{$username}></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-muted" href="<{htmlUrl(['/user/user/logout'])}>">退出</a>
+                </li>
+                <{/if}>
+            </ul>
+        </div>
+    </nav>
+	
+</header>
+<div class="login-alert">
+    <form id="loginForm">
+        <div class="mb-2">
+            <span class="e6ad91">ID</span><input type="text" name="phone" value="" />
+        </div>
+        <div>
+            <span class="e6ad91">PS</span><input type="text" name="password" value="" />
+        </div>
+        <input type="hidden" name="_csrf-frontend" value="<{Yii::$app->request->csrfToken}>" />
+        <ul class="login-link mt-5">
+            <li><a href="javascript:;" id="login">登陆</a></li>
+            <li><a href="javascript:;" id="forget-pwd">忘记密码</a></li>
+            <li><a href="javascript:;" id="reg">注册</a></li>
+        </ul>
+    </form>
+
+</div>
+
+<div class="login-reg">
+    <form id="regForm">
+        <div class="mb-2">
+            <input type="text" placeholder="请输入昵称" name="username" value="" />
+        </div>
+        <div class="mb-2">
+            <input type="text" placeholder="请输入手机号码" name="phone" id="phone" value=""/>
+        </div>
+        <div class="mb-2">
+            <input type="text" placeholder="请输入密码" name="password" value="" />
+        </div>
+        <div class="mb-2">
+            <input type="text" placeholder="请输入所在地址" name="address" value="" />
+        </div>
+        <select name="atag_id">
+            <{foreach from=$artistTag item=vo}>
+             <option value="<{$vo.id}>"><{$vo.name}></option>
+            <{/foreach}>
+        </select>
+
+        <div class="mb-2" style="border:none;">
+            <input type="text" placeholder="请输入验证码" name="code" value="" class="pull-left" style="width:150px;"/>
+            <input type="button" id="btn" class="pull-right" onclick="getcode()" value="获取验证码" style="width:150px;"/>
+        </div>
+        <input type="hidden" name="_csrf-frontend" value="<{Yii::$app->request->csrfToken}>" />
+        <ul class="login-link mt-5">
+            <li><a href="javascript:;" id="register" >注册</a></li>
+        </ul>
+    </form>
+</div>
+
+
+<div class="forgetpwd">
+    <form id="pwdForm">
+        <div class="mb-2">
+            <input type="text" placeholder="请输入手机号码" name="phone" id="phone2" value=""/>
+        </div>
+        <div class="mb-2">
+            <input type="text" placeholder="请输入密码" name="password" value="" />
+        </div>
+        <div class="mb-2">
+            <input type="text" placeholder="请再次输入密码" name="password_confirm" value="" />
+        </div>
+
+        <div class="mb-2" style="border:none;">
+            <input type="text" placeholder="请输入验证码" name="code" value="" class="pull-left" style="width:150px;"/>
+            <input type="button" id="btn2" class="pull-right" onclick="getcode2()" value="获取验证码" style="width:150px;"/>
+        </div>
+        <input type="hidden" name="_csrf-frontend" value="<{Yii::$app->request->csrfToken}>" />
+        <ul class="login-link mt-5">
+            <li><a href="javascript:;" id="forgetpwd" >保存</a></li>
+        </ul>
+    </form>
+</div>
+<div class="ml-5 leftMenu">
+   <{$config.about_us}>
+</div>

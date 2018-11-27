@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>登录</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<{$fstatic_dir}>css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="<{$fstatic_dir}>css/floating-labels.css" rel="stylesheet">
+</head>
+
+<body>
+<form class="form-signin" id="loginForm">
+    <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <p>会员登录</p>
+    </div>
+
+    <div class="form-label-group">
+        <input type="text" id="inputPhone" class="form-control" placeholder="请输入手机号码" name="phone" required autofocus>
+        <label for="inputPhone">请输入手机号码</label>
+    </div>
+
+    <div class="form-label-group">
+        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="请输入密码" required>
+        <label for="inputPassword">请输入密码</label>
+    </div>
+
+    <div class="checkbox mb-3">
+        <label class="float-left">
+            <input type="checkbox" value="active" <{if $remember}> checked <{/if}> name="remember"> 下次自动登录
+        </label>
+        <label class="float-right">
+            <a class="text-secondary" target="_blank" href="#">忘记密码</a>
+            <a class="text-secondary" target="_blank" href="<{htmlUrl(['index/register'])}>">注册</a>
+        </label>
+    </div>
+
+    <input type="hidden" name="_csrf-frontend" value="<{Yii::$app->request->csrfToken}>" />
+    <button class="btn btn-lg btn-primary btn-block" type="button" id="login">登录</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+</form>
+<script src="<{$fstatic_dir}>js/jquery.min.js"></script>
+<script src="<{$fstatic_dir}>js/layer/layer.js"></script>
+<script>
+    $("#login").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/login'])}>",
+            data:$("#loginForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    $("#login").text('登录 . . .');
+                    location.href = e.data;
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+</script>
+</body>
+</html>

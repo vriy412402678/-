@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>注册</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<{$fstatic_dir}>css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="<{$fstatic_dir}>css/floating-labels.css" rel="stylesheet">
+</head>
+
+<body>
+<form class="form-signin" id="regForm">
+    <div class="text-center mb-4">
+        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <p>会员注册</p>
+    </div>
+
+    <div class="form-label-group">
+        <input type="text" id="inputUsername" class="form-control" placeholder="请输入昵称" name="username" required autofocus>
+        <label for="inputUsername">请输入昵称</label>
+    </div>
+
+    <div class="form-label-group">
+        <input type="text" id="inputPhone" class="form-control" placeholder="请输入手机号码" name="phone" required autofocus>
+        <label for="inputPhone">请输入手机号码</label>
+    </div>
+
+    <div class="form-label-group">
+        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="请输入密码" required>
+        <label for="inputPassword">请输入密码</label>
+    </div>
+
+    <div class="form-label-group float-left w-50">
+        <input type="text" id="inputCode" class="form-control " name="code" placeholder="请输入验证码" required>
+        <label for="inputCode">请输入验证码</label>
+    </div>
+
+        <input type="button" id="btn" class="btn btn-primary float-right mt-1" onclick="getcode()" value="获取验证码"/>
+
+
+    <input type="hidden" name="_csrf-frontend" value="<{Yii::$app->request->csrfToken}>" />
+    <button class="btn btn-lg btn-primary btn-block" type="button" id="register">会员注册</button>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+</form>
+<script src="<{$fstatic_dir}>js/jquery.min.js"></script>
+<script src="<{$fstatic_dir}>js/layer/layer.js"></script>
+<script>
+
+
+    $("#register").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/register'])}>",
+            data:$("#regForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    layer.msg(e.msg,{time: 2000, icon:6},function(){
+                        location.href = e.data;
+                    });
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+
+    <!--发送验证码-->
+    function getcode(){
+        var obj = $("#btn");
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/sms-send'])}>",
+            data:{phone:$("input[name='phone']").val()},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    settime(obj);
+                    layer.msg(e.msg,{time: 2000, icon:6});
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        });
+    };
+
+    <!--发送验证码倒计时-->
+    var countdown = 60;
+    function settime(obj) {
+        if (countdown == 0) {
+            obj.attr('disabled',false);
+            //obj.removeattr("disabled");
+            obj.val("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            obj.attr('disabled',true);
+            obj.val("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+                settime(obj) }
+            ,1000)
+    };
+</script>
+</body>
+</html>

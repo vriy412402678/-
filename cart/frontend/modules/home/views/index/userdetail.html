@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/imgUpcommon.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/imgUpindex.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>js//layer/theme/default/layer.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/diy.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/Font-Awesome-3.2.1/css/font-awesome.css">
+    <title>首页</title>
+    <style type="text/css">
+        .article {
+            display: block;
+            overflow: hidden;
+        }
+        .article img{
+            cursor: pointer;
+            transition: all 0.6s;
+        }
+        .article img:hover {
+            transform: scale(1.2);
+        }
+        .article > img {
+            display: block;
+            width: 100%;
+
+        }
+        .article h2 {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 0 0 12px 0;
+        }
+
+        .wall {
+            display: block;
+            position: relative;
+        }
+        .wall-column {
+            display: block;
+            position: relative;
+            width: 25%;
+            float: left;
+            /*padding: 0 12px;*/
+            box-sizing: border-box;
+        }
+        @media (max-width: 640px) {
+            .wall-column {
+                width: 50%;
+            }
+        }
+        @media (max-width: 480px) {
+            .wall-column {
+                width: auto;
+                float: none;
+            }
+        }
+        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+            color:    #ffffff;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    #ffffff;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    #ffffff;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color:    #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<{include '@frontend/views/include/common_header.html'}>
+<div class="rightMenu" >
+<main class="mt-100">
+    <div>
+        <div class="bg-detail">
+            <{if !empty($info.bg_img)}>
+            <!--<img src="<{getImgSrc($info.bg_img)}>" class="bgimg"/>-->
+            <{/if}>
+
+            <div class="mb-5"></div>
+
+            <div class="nav justify-content-center" style="padding-bottom:50px;">
+
+                <img src="<{getImgSrc($info.head_img)}>" alt="头像" class="rounded-circle" id="headimg" width="128" height="128" >
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <ul class="nav justify-content-center mt-3" >
+        <li class="text-white follow-btn mr-5">
+            <i class="follow-bgimg"></i>
+            <div class="pull-left ml-2"><{$followNum}></div>
+        </li>
+        <li style="width:10%;"></li>
+        <li class="text-white follow-btn ml-5" id="xiaoxi">
+            <i class="message-bgimg"></i>
+            <div class="pull-left ml-2">Message</div>
+        </li>
+    </ul>
+
+    <div class="e6ad91 nav justify-content-center mt-5" style="white-space:normal;">
+        <h5><{$info.username}></h5>
+    </div>
+    <div class="mt-5">
+        <ul class="nav justify-content-center clearfix">
+            <li class="nav-item">
+                <a class="nav-link <{if !isset($cate_id) || !empty($cate_id)}>text-white<{else}>allcolor<{/if}>" href="<{htmlUrl(['/home/index/user-detail','id'=>$info.id])}>">全部</a>
+            </li>
+            <{foreach from=$category item=vo }>
+            <li class="nav-item">
+                <a class="nav-link text-white <{if $vo.id eq $cate_id}>allcolor<{else}>text-white<{/if}>" href="<{htmlUrl(['/home/index/user-detail','id'=>$info.id,'cate_id'=>$vo.id])}>"><{$vo.name}></a>
+            </li>
+            <{/foreach}>
+        </ul>
+    </div>
+    <div class="wall mt-3 clearfix" id="flow">
+
+        <{if !empty($proinfo)}>
+        <{foreach from=$proinfo item=vo }>
+        <a class="article" href="<{htmlUrl(['/home/index/detail','id'=>$vo.id])}>">
+            <img src="<{getImgSrc($vo.img)}>">
+        </a>
+        <{/foreach}>
+        <{/if}>
+
+    </div>
+
+</main>
+
+
+<div class="note-right-pin">
+
+    <ul style="overflow-y:auto; overflow-x:auto; width:500px; height:90%;" id="message">
+        <{foreach from=$messageinfo item=vo}>
+        <li class="mb-5 mt-5 pop-hide clearfix" style="width:100%;">
+            <img src="<{getImgSrc(getHeadImg($vo.m_id))}>" class="rounded-circle ml-3 mr-3 pull-left" width="75" height="75" onclick='messagePage("<{$vo.id}>")'/>
+            <div class="pull-left">
+                <p class="text-white"><{getMemberName($vo.m_id)}></p>
+                <p class="text-white" style="width:350px;word-wrap:break-word;">留言 : <{$vo.content}></p>
+            </div>
+        </li>
+        <{/foreach}>
+    </ul>
+
+    <div class="reply-hr mb-3 pop-hide" id="reply-hr"> </div>
+    <div class="reply ml-3 pop-hide">
+        <a href="javascript:;" class="e6ad91 ml-2 mr-2" id="go-back"> < </a><input id="content" type="text" placeholder="留言" value="" class="message-input" /><a href="javascript:;" class="e6ad91 ml-2 mr-2" onclick='enter()' > > </a>
+    </div>
+
+</div>
+
+
+<{include '@frontend/views/include/common_footer.html'}>
+</div>
+<script src="<{$fstatic_dir}>js/jquery.min.js"></script>
+<script src="<{$fstatic_dir}>js/layer/layer.js"></script>
+<script src="<{$fstatic_dir}>js/imgPlugin.js"></script>
+<script src="<{$fstatic_dir}>js/jaliswall.js"></script>
+<script>
+    $(function(){
+        $('.wall').jaliswall({ item: '.article' });
+    });
+
+    $(".note-right-pin").on('click',function(e){
+        var _con = $(".pop-hide");
+        if(!_con.is(e.target)&& _con.has(e.target).length === 0){
+            $(".note-right-pin").hide();
+        }
+
+    });
+
+
+
+    $("#xiaoxi").on("click",function(){
+        if($(".note-right-pin").is(":hidden")){
+            $(".note-right-pin").show();
+            $("#message").show();
+            $(".reply").show();
+        }else{
+            $(".note-right-pin").hide();
+        }
+    });
+
+    function enter(){
+
+        var member_id = "<{$member_id}>";
+        var a_id = "<{$info.id}>";
+        var content = $("#content").val();
+
+        if(member_id == ''){
+            layer.msg('请登录后留言',{time:2000,icon:5});
+            return false;
+        }
+
+        if(content == ''){
+            layer.msg('请输入留言',{time:2000,icon:5});
+            return false;
+        }
+
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['/home/index/reply'])}>",
+            data:{a_id:a_id,content:content},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    var html = '';
+                    html +='<li class="mb-5 mt-5 clearfix">' +
+                        '<img src="'+e.data.mhead_img+'" class="rounded-circle ml-3 mr-3 pull-left" width="75" height="75">'+
+                        '<div class="pull-left">\n' +
+                        '<p class="text-white">'+e.data.mname+'</p>' +
+                        '<p class="text-white" style="width:350px;word-wrap:break-word;">留言 : '+e.data.content+'</p>' +
+                        '</div>'+
+                        '</li>';
+                    $("#message").prepend(html);
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        });
+    };
+
+    $("#go-back").on("click",function(){
+        $(".note-right-pin").hide();
+    });
+</script>
+</body>
+
+</html>

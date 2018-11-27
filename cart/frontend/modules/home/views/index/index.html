@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<{$fstatic_dir}>js/layui/css/layui.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/diy.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/swiper.min.css">
+    <title>首页</title>
+    <style type="text/css">
+        .article {
+            display: block;
+            overflow: hidden;
+        }
+        .article img{
+            cursor: pointer;
+            transition: all 0.6s;
+        }
+        .article img:hover {
+            transform: scale(1.2);
+        }
+        .article > img {
+            display: block;
+            width: 100%;
+
+        }
+        .article h2 {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin: 0 0 12px 0;
+        }
+
+        .wall {
+            display: block;
+            position: relative;
+        }
+        .wall-column {
+            display: block;
+            position: relative;
+            width: 25%;
+            float: left;
+            /*padding: 0 12px;*/
+            box-sizing: border-box;
+
+        }
+        @media (max-width: 640px) {
+            .wall-column {
+                width: 50%;
+            }
+        }
+        @media (max-width: 480px) {
+            .wall-column {
+                width: auto;
+                float: none;
+            }
+        }
+        .swiper-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px auto;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<{include '@frontend/views/include/common_header.html'}>
+
+<div class="rightMenu" >
+<div class="mt-100 clearfix">
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <{if !empty($carousel)}>
+            <{foreach from=$carousel item=vo key=key}>
+            <div class="swiper-slide"><img src="<{$vo.img}>" alt="<{$vo.title}>" width="100%" height="100%"></div>
+            <{/foreach}>
+            <{/if}>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+</div>
+<main>
+
+    <div class="container">
+    <ul class="cate nav justify-content-center" >
+        <li style="width:38%"><a href="<{htmlUrl(['/home/index/two-dcg'])}>" class="twogcg d-block"></a></li>
+        <li style="width:38%"><a href="<{htmlUrl(['/home/index/video'])}>" class="video d-block"></a></li>
+        <li class="" ><a href="<{htmlUrl(['/home/index/three-dcg'])}>" class="threegcg d-block"></a></li>
+    </ul>
+    </div>
+
+    <div class="mt-5">
+        <ul class="nav justify-content-center clearfix">
+            <li class="nav-item">
+                <a class="nav-link <{if !isset($cate_id) || !empty($cate_id)}>text-white<{else}>allcolor<{/if}>" href="<{htmlUrl(['/home/index/index'])}>">全部</a>
+            </li>
+            <{foreach from=$category item=vo }>
+            <li class="nav-item">
+                <a class="nav-link text-white <{if $vo.id eq $cate_id}>allcolor<{else}>text-white<{/if}>" href="<{htmlUrl(['/home/index/index','cate_id'=>$vo.id])}>"><{$vo.name}></a>
+            </li>
+            <{/foreach}>
+        </ul>
+    </div>
+
+    <div class="wall mt-3 clearfix" id="flow">
+
+        <{if !empty($productList)}>
+        <{foreach from=$productList item=vo }>
+        <a class="article" href="<{htmlUrl(['/home/index/detail','id'=>$vo.id])}>">
+            <img src="<{getImgSrc($vo.img)}>">
+        </a>
+        <{/foreach}>
+        <{/if}>
+
+    </div>
+
+    <div class="clearfix" id="artist">
+        <div class="text-center mb-3"><span class="artist"></span></div>
+        <a href="<{htmlUrl(['/home/index/artist'])}>"><div class="text-center"><span class="seemore mb-5"></span></div></a>
+
+
+        <ul class="artilst-list">
+            <{foreach from=$minfo item=vo key=key}>
+
+            <li class="mr-4 mb-2 <{if ($key+1) % 4==0 || ($key+1) % 8==0}> margin-right-0 <{/if}>">
+                <a href="<{htmlUrl(['/home/index/user-detail','id'=>$vo.id])}>">
+                    <img src="<{getImgSrc($vo.head_img)}>" class="rounded-0" width="135" height="135">
+                    <h5 class="artilst-text-color text-ellipsis mt-2" title="<{$vo.username}>"><{$vo.username}></h5>
+                    <div class="artilist-text-style"> <span class="artilst-text-color text-ellipsis" title="<{$vo.address}>"><i class="dingwei"></i> <{$vo.address}></span></div>
+                    <div class="artilist-text-style"> <span class="artilst-text-color text-ellipsis"><i class="views"></i> 人气 : <{$vo.repute_num}></span></div>
+                    <div class="artilist-text-style"> <span class="artilst-text-color text-ellipsis"><i class="renwu"></i> <{getArtistTagName($vo.atag_id)}></span></div>
+                </a>
+                <button class="guanzhubtn mt-1" onclick='addFollow("<{$vo.id}>",this)' <{if in_array($vo.id,$fids)}>disabled<{/if}>> <span class="artilst-text-color"><i class="jiahao"></i> <{if in_array($vo.id,$fids)}>已关注<{else}>关注<{/if}></span></button>
+            </li>
+            <{/foreach}>
+        </ul>
+    </div>
+
+
+    <div class="clearfix" id="jobs">
+        <div class="text-center mb-3"><span class="jobs"></span></div>
+        <a href="<{htmlUrl(['/home/index/company'])}>"><div class="text-center"><span class="seemore mb-5"></span></div></a>
+
+        <div  class="jobs-list clearfix">
+            <ul>
+                <{foreach from=$fsinfo item=vo key=k}>
+
+                <li class="mr-4 mb-2 <{if ($k+1)%4 eq 0 || ($k+1)%8 eq 0}>margin-right-0<{/if}>">
+                    <a href="<{$vo.link}>" class="text-decoration-none">
+                        <img src="<{getImgSrc($vo.img)}>" class="rounded-0" width="125" height="125">
+                        <h6 class="jobs-list-text-color text-ellipsis mt-3" title="<{$vo.name}>"><{$vo.name}></h6>
+                        <p class="jobs-list-text-color text-ellipsis mt-3" title="<{$vo.describe}>"><{$vo.describe}></p>
+                    </a>
+                </li>
+                <{/foreach}>
+            </ul>
+        </div>
+
+
+
+    </div>
+
+    <!--<div class="row mt-5 container">-->
+        <!--<nav aria-label="Page navigation example" class="">-->
+            <!--<{$pages}>-->
+        <!--</nav>-->
+    <!--</div>-->
+
+
+
+</main>
+
+<{include '@frontend/views/include/common_footer.html'}>
+</div>
+<script src="<{$fstatic_dir}>js/jaliswall.js"></script>
+<script src="<{$fstatic_dir}>js/swiper.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("body").scroll(function(event){
+
+            if($("body").scrollTop() <=0){
+                $(".navbar-brand").addClass('mb-3');
+                $(".navbar-brand > img").attr({'width':'60','height':'60'});
+                $(".login-about").addClass('mt-3 mb-3');
+                $(".login-logo").addClass('mt-3 mb-3');
+            }else{
+                $(".navbar-brand").removeClass('mb-3');
+                $(".navbar-brand > img").attr({'width':'55','height':'50'});
+                $(".login-about").removeClass('mt-3 mb-3');
+                $(".login-logo").removeClass('mt-3 mb-3');
+            }
+
+        });
+
+    });
+    $(function(){
+        $('.wall').jaliswall({ item: '.article' });
+    });
+
+
+    $(".swiper-container").hover(function(){
+        $(".swiper-button-prev").show();
+        $(".swiper-button-next").show();
+    },function(){
+        $(".swiper-button-prev").hide();
+        $(".swiper-button-next").hide();
+    });
+
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        slidesPerView: 3,
+        paginationClickable: true,
+        // spaceBetween: 30,
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        freeMode: true
+    });
+
+    function addFollow(id,self){
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['/user/user/follow'])}>",
+            data:{a_id:id},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    $(self).attr('disabled',true);
+                    $(self).html('<span class="artilst-text-color"><i class="jiahao"></i> 已关注</span>');
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    }
+
+
+
+</script>
+</body>
+</html>

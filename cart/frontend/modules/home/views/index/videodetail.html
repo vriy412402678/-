@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="<{$fstatic_dir}>js/layui/css/layui.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/bootstrap.min.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/diy.css">
+    <link rel="stylesheet" href="<{$fstatic_dir}>css/idangerous.swiper.css">
+    <style>
+        .upload-normal-box{width: 100%;height: 220px;text-align: center;padding-top: 104px;color: #999;background-image: url(/public/frontend/images/addworkiconh.png);background-position: center 65px;background-repeat: no-repeat;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}
+        .pc-slide {
+            width: 100%;
+        }
+
+        .view .swiper-container {
+            width: 100%;
+            height:1000px;
+        }
+
+        .view .swiper-container video{
+            width:100%;
+            height:100%;
+            /*max-width:100%;*/
+            /*max-height:100%;*/
+        }
+        .view .arrow-left {
+            background: url("<{$fstatic_dir}>images/index_tab_l.png") no-repeat left top;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            margin-top: -25px;
+            width: 28px;
+            height: 51px;
+            z-index: 10;
+        }
+
+        .view .arrow-right {
+            background: url("<{$fstatic_dir}>images/index_tab_r.png") no-repeat left bottom;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -25px;
+            width: 28px;
+            height: 51px;
+            z-index: 10;
+        }
+
+        .preview {
+            width: 300px;
+            height:300px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .preview .swiper-container {
+            width: 300px;
+            height: 300px;
+            margin-left: 35px;
+        }
+
+        .preview .swiper-slide {
+            width: 87px;
+            height: 82px;
+        }
+
+        .preview .slide6 {
+            width: 82px;
+        }
+
+        .preview .arrow-left {
+            background: url("<{$fstatic_dir}>images/feel3.png") no-repeat left top;
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            margin-top: -9px;
+            width: 9px;
+            height: 18px;
+            z-index: 10;
+        }
+
+        .preview .arrow-right {
+            background: url("<{$fstatic_dir}>images/feel4.png") no-repeat left bottom;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -9px;
+            width: 9px;
+            height: 18px;
+            z-index: 10;
+        }
+
+        .preview img {
+            padding: 1px;
+        }
+
+        .preview .active-nav img {
+            padding: 0;
+            border: 1px solid #F00;
+        }
+
+        .release{
+            position: relative;
+        }
+
+        .main-left {
+            width:75%;
+            height:100%;
+            position:fixed;
+            left:0;
+            top:0;
+            bottom:0;
+            float:left;
+        }
+
+        .main-right {
+            float:right;
+            width:400px;
+        }
+        .liaotian{width:300px;}
+    </style>
+    <title>首页</title>
+
+</head>
+<body>
+<{include '@frontend/views/include/common_header.html'}>
+<div class="rightMenu" >
+<main class="">
+
+    <!--<{if $info.status eq 1}>-->
+    <!--<div class="alert alert-danger" role="alert"> 作品正在审核当中! </div>-->
+    <!--<{elseif $info.status eq 3}>-->
+    <!--<div class="alert alert-danger" role="alert"> 作品审核不通过,请修改后再次提交! </div>-->
+    <!--<{/if}>-->
+
+    <div class="main-left mr-3">
+        <div class="pc-slide">
+            <div class="view">
+                <div class="swiper-container">
+                    <a class="arrow-left" href="#"></a>
+                    <a class="arrow-right" href="#"></a>
+                    <div class="swiper-wrapper">
+                        <{foreach from=$newdata item=vo key=key}>
+                        <div class="swiper-slide layer-photos-demo release">
+                            <video id="videoStop<{$key}>" class="videoStop" controls="controls" poster="<{getVideoSrc($vo.video)}>?vframe/jpg/offset/1/w/1232/h/700" src="<{getVideoSrc($vo.video)}>" width="100%" height="auto"></video>
+
+                            <div class="sandz">
+
+                                <a href="javascript:;" class="<{if in_array($vo.id,$zids)}>ydianzan<{else}>dianzan<{/if}> mr-4 ml-3" onclick='zan("<{$vo.id}>",this)' > </a>
+
+                                <a href="javascript:;" class="<{if in_array($vo.id,$cids)}>yshoucan<{else}>shoucan<{/if}>" onclick='collect("<{$vo.id}>",this)' > </a>
+                            </div>
+                        </div>
+                        <{/foreach}>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <div class="mt-100 main-right">
+        <div class="liaotian">
+        <div class="ml-5">
+            <img src="<{getImgSrc($minfo.head_img)}>" alt="头像" class="rounded-circle" >
+            <label><a href="<{htmlUrl(['/home/index/user-detail','id'=>$minfo.id])}>" class="text-decoration-none"><p class="text-secondary">作者姓名</p><h5 class="text-muted"><{$minfo.username}></h5></a></label>
+        </div>
+
+        <div class="leave-message-style mt-3">
+            <ul>
+                <{foreach from=$message item=vo}>
+                <li class="e6ad91 p-1"><{$vo.content}></li>
+                <{/foreach}>
+            </ul>
+        </div>
+        <input type="text" name="content" class="send-message mt-3 mr-2" placeholder="请输入留言" value="" />
+        <button type="button" class="btn btn-primary mt-3" onclick='send("<{$info.id}>")'>发送</button>
+        <div class="mt-5">
+            <h5 class="margin-left-35"><a href="<{htmlUrl(['/home/index/video'])}>" class="e6ad91">See More</a></h5>
+            <!--略缩图-->
+            <div class="preview">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <{foreach from=$newdata item=vo key=key}>
+                        <div class="swiper-slide active-nav">
+                            <img src="<{getVideoSrc($vo.video)}>?vframe/jpg/offset/1" alt="" width="80" height="80">
+                        </div>
+                        <{/foreach}>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+</main>
+
+</div>
+<script src="<{$fstatic_dir}>js/jquery.min.js"></script>
+<script src="<{$fstatic_dir}>js/popper.min.js"></script>
+<script src="<{$fstatic_dir}>js/bootstrap.min.js"></script>
+<script src="<{$fstatic_dir}>js/topage.js"></script>
+<script src="<{$fstatic_dir}>js/layer/layer.js"></script>
+<!--<script src="<{$fstatic_dir}>js/stickUp.min.js"></script>-->
+<script src="<{$fstatic_dir}>js/layui/layui.js"></script>
+<script>
+
+    if($(window).width() < 500){
+        $(".follow-btn").css('width','27%');
+    }else{
+        $(".follow-btn").css('width','150px');
+    }
+
+    if($(window).width() < 1664){
+        $(".main-left").css({'width':'100%','position':'relative'});
+        $(".main-right").css({'width':'100%'});
+        $(".liaotian").css({'margin':"0 auto"});
+    }
+
+    $(".login-about").on('click',function(){
+        if($(window).width() < 1200){
+            $(".rightMenu").toggleClass("min-swiper");
+            $(".fixed-top").toggleClass("min-swiper-top");
+
+        }else{
+            $(".rightMenu").toggleClass("swiper");
+            $(".fixed-top").toggleClass("swiper-top");
+        }
+        if($(".leftMenu").is(":hidden")){
+            $(".leftMenu").show();
+        }else{
+            $(".leftMenu").hide();
+        }
+    });
+
+    $(".login-logo").on('click',function(){
+        $(".login-reg").hide();
+        $(".forgetpwd").hide();
+        if($('.login-alert').is(":hidden")){
+            $('.login-alert').show();
+        }else{
+            $('.login-alert').hide();
+        }
+    });
+    $("#login").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/login'])}>",
+            data:$("#loginForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    $("#login").text('登录 . . .');
+                    location.href = e.data;
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+    $("#reg").on("click",function(){
+        $('.login-reg').show();
+        $('.login-alert').hide();
+        $(".forgetpwd").hide();
+    });
+
+    $("#forget-pwd").on("click",function(){
+        $(".forgetpwd").show();
+        $('.login-reg').hide();
+        $('.login-alert').hide();
+    });
+
+    $("#register").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/register'])}>",
+            data:$("#regForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    layer.msg(e.msg,{time: 2000, icon:6},function(){
+                        location.href = e.data;
+                    });
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+
+    $("#forgetpwd").on("click",function(){
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/forget-pwd'])}>",
+            data:$("#pwdForm").serialize(),
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    layer.msg(e.msg,{time: 2000, icon:6},function(){
+                        location.href = e.data;
+                    });
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        })
+    });
+
+
+    <!--发送验证码-->
+    function getcode(){
+        var obj = $("#btn");
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/sms-send'])}>",
+            data:{phone:$("#phone").val()},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    settime(obj);
+                    layer.msg(e.msg,{time: 2000, icon:6});
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        });
+    };
+
+    <!--发送验证码-->
+    function getcode2(){
+        var obj = $("#btn2");
+
+        $.ajax({
+            type:"post",
+            url:"<{htmlUrl(['index/sms-send'])}>",
+            data:{phone:$("#phone2").val(),type:2},
+            dataType:"json",
+            success:function(e){
+                if(e.error_code == 1){
+                    layer.msg(e.msg,{time: 2000,icon:5});
+                }else{
+                    settime(obj);
+                    layer.msg(e.msg,{time: 2000, icon:6});
+                }
+            },
+            error:function(){
+                layer.msg('网络异常',{time: 2000,icon: 5});
+            }
+        });
+    };
+
+    <!--发送验证码倒计时-->
+    var countdown = 60;
+    function settime(obj) {
+        if (countdown == 0) {
+            obj.attr('disabled',false);
+            //obj.removeattr("disabled");
+            obj.val("获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            obj.attr('disabled',true);
+            obj.val("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+                settime(obj) }
+            ,1000)
+    };
+</script>
+<script src="<{$fstatic_dir}>js/idangerous.swiper.min.js"></script>
+
+<script>
+
+<!--点赞-->
+
+function zan(id,self){
+
+    $.ajax({
+        type:"post",
+        url:"<{htmlUrl(['/user/product/video-zan'])}>",
+        data:{id:id},
+        dataType:"json",
+        success:function(e){
+            if(e.error_code == 1){
+                layer.msg(e.msg,{time: 2000,icon:5});
+            }else{
+                $(self).removeClass('dianzan').addClass('ydianzan');
+            }
+        },
+        error:function(){
+            layer.msg('网络异常',{time: 2000,icon: 5});
+        }
+    });
+
+}
+
+function collect(id,self){
+
+    $.ajax({
+        type:"post",
+        url:"<{htmlUrl(['/user/product/video-collect'])}>",
+        data:{id:id},
+        dataType:"json",
+        success:function(e){
+            if(e.error_code == 1){
+                layer.msg(e.msg,{time: 2000,icon:5});
+            }else{
+                $(self).removeClass('shoucan').addClass('yshoucan');
+            }
+        },
+        error:function(){
+            layer.msg('网络异常',{time: 2000,icon: 5});
+        }
+    });
+
+}
+
+
+
+var viewSwiper = new Swiper('.view .swiper-container', {
+    onSlideChangeStart: function() {
+        updateNavPosition()
+    }
+});
+
+
+
+$('.view .arrow-left,.preview .arrow-left').on('click', function(e) {
+    e.preventDefault()
+    if (viewSwiper.activeIndex == 0) {
+        var num = parseInt(viewSwiper.activeIndex);
+        $("#videoStop"+num).get(0).pause();
+        viewSwiper.swipeTo(viewSwiper.slides.length - 1, 1000);
+        return
+    }
+    var num = parseInt(viewSwiper.activeIndex);
+    $("#videoStop"+num).get(0).pause();
+    viewSwiper.swipePrev();
+
+})
+$('.view .arrow-right,.preview .arrow-right').on('click', function(e) {
+    e.preventDefault()
+    if (viewSwiper.activeIndex == viewSwiper.slides.length - 1) {
+
+        viewSwiper.swipeTo(0, 1000);
+        return
+    }
+    var num = parseInt(viewSwiper.activeIndex);
+    $("#videoStop"+num).get(0).pause();
+    viewSwiper.swipeNext();
+
+})
+
+var previewSwiper = new Swiper('.preview .swiper-container', {
+    cssWidthAndHeight:true,
+    visibilityFullFit: true,
+    slidesPerView: 'auto',
+    onlyExternal: true,
+    useCSS3Transforms : false,
+    onSlideClick: function() {
+        viewSwiper.swipeTo(previewSwiper.clickedSlideIndex)
+    }
+})
+
+function updateNavPosition() {
+
+    $('.preview .active-nav').removeClass('active-nav');
+    var activeNav = $('.preview .swiper-slide').eq(viewSwiper.activeIndex).addClass('active-nav');
+    if (!activeNav.hasClass('swiper-slide-visible')) {
+        if (activeNav.index() > previewSwiper.activeIndex) {
+
+            var thumbsPerNav = Math.floor(previewSwiper.width / activeNav.width()) - 1
+            previewSwiper.swipeTo(activeNav.index() - thumbsPerNav)
+        } else {
+            previewSwiper.swipeTo(activeNav.index())
+        }
+    }
+}
+
+
+layer.photos({
+    photos: '.layer-photos-demo'
+    ,shadeClose:true
+    ,closeBtn:2
+    ,anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+});
+
+function send(id){
+    $.ajax({
+        type:"post",
+        url:"<{htmlUrl(['/home/index/message'])}>",
+        data:{pro_id:id,content:$("input[name='content']").val(),type:2},
+        dataType:"json",
+        success:function(e){
+            if(e.error_code == 1){
+                layer.msg(e.msg,{time: 2000,icon:5});
+            }else{
+                location.reload();
+            }
+        },
+        error:function(){
+            layer.msg('网络异常',{time: 2000,icon: 5});
+        }
+    });
+}
+</script>
+</body>
+</html>
